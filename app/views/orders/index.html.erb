@@ -1,0 +1,26 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Orders" %>
+
+<h1>Orders</h1>
+<h1>Ello Cookies Orders</h1>
+
+<div style="display:flex; gap:16px; margin: 16px 0;">
+  <div><b>Order Total (bags)</b><br><%= @total_bags %></div>
+  <div><b>Pork</b><br><%= @total_pork %></div>
+  <div><b>Chicken</b><br><%= @total_chicken %></div>
+  <div><b>Total Cost</b><br><%= number_to_currency(@total_cost, unit: "", precision: 0) %></div>
+</div>
+
+<div id="orders">
+  <% @orders.each do |order| %>
+    <%= render order %>
+    <p>
+    <td><%= number_to_currency(order.order_cost, unit: "", precision: 0) %></td>
+    <td><%= number_to_currency(order.total_cost, unit: "", precision: 0) %></td>
+      <%= link_to "Show this order", order %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New order", new_order_path %>

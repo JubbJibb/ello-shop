@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  order_date: 2026-01-20
+  customer_name: MyString
+  customer_address: MyText
+  pork_qty: 1
+  chicken_qty: 1
+  delivery_channel: MyString
+  delivery_fee: 1
+  delivery_date: 2026-01-20
+  status: MyString
+
+two:
+  order_date: 2026-01-20
+  customer_name: MyString
+  customer_address: MyText
+  pork_qty: 1
+  chicken_qty: 1
+  delivery_channel: MyString
+  delivery_fee: 1
+  delivery_date: 2026-01-20
+  status: MyString

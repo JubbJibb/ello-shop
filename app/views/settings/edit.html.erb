@@ -1,0 +1,14 @@
+<h1>Settings#edit</h1>
+<p>Find me in app/views/settings/edit.html.erb</p>
+
+<h1>Settings</h1>
+
+<%= form_with model: @setting, url: settings_path, method: :patch do |f| %>
+  <div>
+    <%= f.label :price_per_bag, "Price per bag" %>
+    <%= f.number_field :price_per_bag %>
+  </div>
+  <%= f.submit "Save" %>
+<% end %>
+
+<%= link_to "Settings", edit_settings_path %>
