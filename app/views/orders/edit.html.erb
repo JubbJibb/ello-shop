@@ -1,12 +1,16 @@
 <% content_for :title, "Editing order" %>
 
-<h1>Editing order</h1>
+<section class="page-header">
+  <div>
+    <h1>Editing order</h1>
+    <p class="help-text">Update bag quantities or fulfillment details.</p>
+  </div>
+  <div class="page-actions">
+    <%= link_to "Show order", @order, class: "btn btn-secondary" %>
+    <%= link_to "Back to orders", orders_path, class: "btn btn-ghost" %>
+  </div>
+</section>
 
-<%= render "form", order: @order %>
-
-<br>
-
-<div>
-  <%= link_to "Show this order", @order %> |
-  <%= link_to "Back to orders", orders_path %>
+<div class="card">
+  <%= render "form", order: @order, show_status: true, submit_label: "Update order" %>
 </div>

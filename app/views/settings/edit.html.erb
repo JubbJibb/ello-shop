@@ -1,14 +1,22 @@
-<h1>Settings#edit</h1>
-<p>Find me in app/views/settings/edit.html.erb</p>
+<% content_for :title, "Settings" %>
 
-<h1>Settings</h1>
-
-<%= form_with model: @setting, url: settings_path, method: :patch do |f| %>
+<section class="page-header">
   <div>
-    <%= f.label :price_per_bag, "Price per bag" %>
-    <%= f.number_field :price_per_bag %>
+    <h1>Settings</h1>
+    <p class="help-text">Manage pricing and storefront defaults.</p>
   </div>
-  <%= f.submit "Save" %>
-<% end %>
+  <div class="page-actions">
+    <%= link_to "Back to orders", orders_path, class: "btn btn-ghost" %>
+  </div>
+</section>
 
-<%= link_to "Settings", edit_settings_path %>
+<div class="card">
+  <%= form_with model: @setting, url: settings_path, method: :patch do |f| %>
+    <div class="form-field">
+      <%= f.label :price_per_bag, "Price per bag" %>
+      <%= f.number_field :price_per_bag, min: 1, step: 1 %>
+      <p class="help-text">Default price used across the storefront.</p>
+    </div>
+    <%= f.submit "Save changes", class: "btn btn-primary" %>
+  <% end %>
+</div>

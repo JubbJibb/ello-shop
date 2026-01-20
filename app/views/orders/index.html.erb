@@ -1,26 +1,77 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Orders" %>
 
-<h1>Orders</h1>
-<h1>Ello Cookies Orders</h1>
+<section class="page-header">
+  <div>
+    <h1>Orders</h1>
+    <p class="help-text">Track customer orders and fulfillment status.</p>
+  </div>
+  <div class="page-actions">
+    <%= link_to "New order", new_order_path, class: "btn btn-primary" %>
+    <%= link_to "Shop view", root_path, class: "btn btn-secondary" %>
+  </div>
+</section>
 
-<div style="display:flex; gap:16px; margin: 16px 0;">
-  <div><b>Order Total (bags)</b><br><%= @total_bags %></div>
-  <div><b>Pork</b><br><%= @total_pork %></div>
-  <div><b>Chicken</b><br><%= @total_chicken %></div>
-  <div><b>Total Cost</b><br><%= number_to_currency(@total_cost, unit: "", precision: 0) %></div>
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-title">Total bags</div>
+    <div class="stat-value"><%= @total_bags %></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-title">Pork bags</div>
+    <div class="stat-value"><%= @total_pork %></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-title">Chicken bags</div>
+    <div class="stat-value"><%= @total_chicken %></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-title">Total revenue</div>
+    <div class="stat-value"><%= number_to_currency(@total_cost, unit: "$", precision: 0) %></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-title">Price per bag</div>
+    <div class="stat-value"><%= number_to_currency(@price_per_bag, unit: "$", precision: 0) %></div>
+  </div>
 </div>
 
-<div id="orders">
-  <% @orders.each do |order| %>
-    <%= render order %>
-    <p>
-    <td><%= number_to_currency(order.order_cost, unit: "", precision: 0) %></td>
-    <td><%= number_to_currency(order.total_cost, unit: "", precision: 0) %></td>
-      <%= link_to "Show this order", order %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New order", new_order_path %>
+<% if @orders.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Customer</th>
+        <th>Bags</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @orders.each do |order| %>
+        <tr>
+          <td><%= order.order_date || order.created_at.to_date %></td>
+          <td>
+            <strong><%= order.customer_name.presence || "Guest" %></strong>
+            <div class="help-text"><%= order.customer_address %></div>
+          </td>
+          <td><%= order.total_bags %></td>
+          <td><%= number_to_currency(order.total_cost, unit: "$", precision: 0) %></td>
+          <td>
+            <% status = order.status.presence || "Pending" %>
+            <span class="badge <%= status_badge_class(status) %>"><%= status %></span>
+          </td>
+          <td>
+            <%= link_to "View", order_path(order) %> |
+            <%= link_to "Edit", edit_order_path(order) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="card">
+    <h3>No orders yet</h3>
+    <p class="help-text">Share your storefront to start receiving orders.</p>
+    <%= link_to "Open storefront", root_path, class: "btn btn-primary" %>
+  </div>
+<% end %>

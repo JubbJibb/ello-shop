@@ -1,11 +1,15 @@
 <% content_for :title, "New order" %>
 
-<h1>New order</h1>
+<section class="page-header">
+  <div>
+    <h1>New order</h1>
+    <p class="help-text">Create a new order for a customer.</p>
+  </div>
+  <div class="page-actions">
+    <%= link_to "Back to orders", orders_path, class: "btn btn-ghost" %>
+  </div>
+</section>
 
-<%= render "form", order: @order %>
-
-<br>
-
-<div>
-  <%= link_to "Back to orders", orders_path %>
+<div class="card">
+  <%= render "form", order: @order, show_status: true, submit_label: "Create order" %>
 </div>

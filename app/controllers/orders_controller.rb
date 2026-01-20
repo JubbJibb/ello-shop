@@ -9,6 +9,7 @@ class OrdersController < ApplicationController
     @total_chicken = @orders.sum(:chicken_qty)
     @total_bags = @total_pork.to_i + @total_chicken.to_i
     @total_cost = @orders.sum { |o| o.total_cost }
+    @price_per_bag = Setting.first&.price_per_bag || Setting::DEFAULT_PRICE_PER_BAG
   end
   
 
@@ -18,7 +19,7 @@ class OrdersController < ApplicationController
 
   # GET /orders/new
   def new
-    @order = Order.new
+    @order = Order.new(order_date: Date.current, status: Order::STATUSES.first)
   end
 
   # GET /orders/1/edit
