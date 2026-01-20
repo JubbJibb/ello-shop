@@ -1,8 +1,10 @@
+<% show_status = local_assigns.fetch(:show_status, order.persisted?) %>
+<% submit_label = local_assigns.fetch(:submit_label, order.persisted? ? "Update order" : "Place order") %>
+
 <%= form_with(model: order) do |form| %>
   <% if order.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(order.errors.count, "error") %> prohibited this order from being saved:</h2>
-
+    <div class="flash flash-error">
+      <strong><%= pluralize(order.errors.count, "error") %> prohibited this order from being saved:</strong>
       <ul>
         <% order.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,55 +13,71 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :order_date, style: "display: block" %>
-    <%= form.text_field :order_date %>
+  <div class="form-section">
+    <h3>Customer details</h3>
+    <div class="form-row">
+      <div class="form-field">
+        <%= form.label :customer_name, "Name" %>
+        <%= form.text_field :customer_name, placeholder: "Jane Doe" %>
+      </div>
+      <div class="form-field">
+        <%= form.label :customer_address, "Address" %>
+        <%= form.text_area :customer_address, placeholder: "Street address, city, and notes" %>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :customer_name, style: "display: block" %>
-    <%= form.text_field :customer_name %>
+  <div class="form-section">
+    <h3>Bag selection</h3>
+    <p class="help-text">
+      Price per bag: <strong><%= number_to_currency(order.price_per_bag, unit: "$", precision: 0) %></strong>
+    </p>
+    <div class="form-row">
+      <% Order::PRODUCTS.each do |product| %>
+        <div class="form-field">
+          <%= form.label product[:key], product[:name] %>
+          <%= form.number_field product[:key], min: 0, step: 1 %>
+          <p class="help-text"><%= product[:description] %></p>
+        </div>
+      <% end %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :customer_address, style: "display: block" %>
-    <%= form.text_field :customer_address %>
+  <div class="form-section">
+    <h3>Delivery</h3>
+    <div class="form-row">
+      <div class="form-field">
+        <%= form.label :delivery_channel, "Delivery method" %>
+        <%= form.select :delivery_channel, Order::DELIVERY_CHANNELS, include_blank: "Select method" %>
+      </div>
+      <div class="form-field">
+        <%= form.label :delivery_date, "Delivery date" %>
+        <%= form.date_field :delivery_date %>
+      </div>
+      <div class="form-field">
+        <%= form.label :delivery_fee, "Delivery fee" %>
+        <%= form.number_field :delivery_fee, min: 0, step: 1 %>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :pork_qty, style: "display: block" %>
-    <%= form.text_field :pork_qty %>
-  </div>
+  <% if show_status %>
+    <div class="form-section">
+      <h3>Order status</h3>
+      <div class="form-row">
+        <div class="form-field">
+          <%= form.label :order_date, "Order date" %>
+          <%= form.date_field :order_date %>
+        </div>
+        <div class="form-field">
+          <%= form.label :status %>
+          <%= form.select :status, Order::STATUSES, include_blank: "Select status" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
 
   <div>
-    <%= form.label :chicken_qty, style: "display: block" %>
-    <%= form.text_field :chicken_qty %>
-  </div>
-
-  <div>
-    <%= form.label :delivery_channel, style: "display: block" %>
-    <%= form.text_field :delivery_channel %>
-  </div>
-
-  <div>
-    <%= form.label :delivery_fee, style: "display: block" %>
-    <%= form.text_field :delivery_fee %>
-  </div>
-
-  <div>
-    <%= form.label :delivery_date, style: "display: block" %>
-    <%= form.text_field :delivery_date %>
-  </div>
-
-  <div>
-  <%= form.label :status %>
-  <%= form.select :status, Order::STATUSES, include_blank: true %>
-  </div>
-  <div>
-</div>
-
-
-  <div>
-    <%= form.submit %>
+    <%= form.submit submit_label, class: "btn btn-primary" %>
   </div>
 <% end %>

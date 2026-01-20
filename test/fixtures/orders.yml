@@ -6,10 +6,10 @@ one:
   customer_address: MyText
   pork_qty: 1
   chicken_qty: 1
-  delivery_channel: MyString
+  delivery_channel: Pickup
   delivery_fee: 1
   delivery_date: 2026-01-20
-  status: MyString
+  status: Packing
 
 two:
   order_date: 2026-01-20
@@ -17,7 +17,7 @@ two:
   customer_address: MyText
   pork_qty: 1
   chicken_qty: 1
-  delivery_channel: MyString
+  delivery_channel: Local Delivery
   delivery_fee: 1
   delivery_date: 2026-01-20
-  status: MyString
+  status: Done

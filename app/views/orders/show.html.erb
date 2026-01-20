@@ -1,10 +1,70 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "Order ##{@order.id}" %>
 
-<%= render @order %>
+<section class="page-header">
+  <div>
+    <h1>Order #<%= @order.id %></h1>
+    <% status = @order.status.presence || "Pending" %>
+    <span class="badge <%= status_badge_class(status) %>"><%= status %></span>
+  </div>
+  <div class="page-actions">
+    <%= link_to "Edit order", edit_order_path(@order), class: "btn btn-secondary" %>
+    <%= link_to "Back to orders", orders_path, class: "btn btn-ghost" %>
+    <%= button_to "Cancel order", @order, method: :delete, class: "btn btn-secondary", form: { data: { turbo_confirm: "Cancel this order?" } } %>
+  </div>
+</section>
 
-<div>
-  <%= link_to "Edit this order", edit_order_path(@order) %> |
-  <%= link_to "Back to orders", orders_path %>
+<div class="grid grid-2">
+  <div class="card">
+    <h3>Customer</h3>
+    <p><strong><%= @order.customer_name.presence || "Guest" %></strong></p>
+    <p class="help-text"><%= @order.customer_address.presence || "No address provided" %></p>
+    <p class="help-text">Order date: <%= @order.order_date || @order.created_at.to_date %></p>
+  </div>
+  <div class="card">
+    <h3>Delivery</h3>
+    <p><strong><%= @order.delivery_channel.presence || "Not selected" %></strong></p>
+    <p class="help-text">Delivery date: <%= @order.delivery_date || "TBD" %></p>
+    <p class="help-text">Delivery fee: <%= number_to_currency(@order.delivery_cost, unit: "$", precision: 0) %></p>
+  </div>
+</div>
 
-  <%= button_to "Destroy this order", @order, method: :delete %>
+<div class="card" style="margin-top: 24px;">
+  <h3>Items</h3>
+  <% if @order.product_quantities.any? %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @order.product_quantities.each do |product| %>
+          <tr>
+            <td><%= product[:name] %></td>
+            <td><%= product[:quantity] %></td>
+            <td><%= number_to_currency(@order.price_per_bag, unit: "$", precision: 0) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="help-text">No bags selected for this order.</p>
+  <% end %>
+
+  <div>
+    <div class="summary-row">
+      <span>Subtotal</span>
+      <div><%= number_to_currency(@order.order_cost, unit: "$", precision: 0) %></div>
+    </div>
+    <div class="summary-row">
+      <span>Delivery</span>
+      <div><%= number_to_currency(@order.delivery_cost, unit: "$", precision: 0) %></div>
+    </div>
+    <div class="summary-row">
+      <span>Total</span>
+      <div><%= number_to_currency(@order.total_cost, unit: "$", precision: 0) %></div>
+    </div>
+  </div>
 </div>

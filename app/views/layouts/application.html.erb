@@ -24,6 +24,25 @@
   </head>
 
   <body>
-    <%= yield %>
+    <nav class="navbar">
+      <div class="container nav-content">
+        <div class="brand">
+          <%= link_to "Ello Shop", root_path %>
+        </div>
+        <div class="nav-links">
+          <%= link_to "Shop", root_path %>
+          <%= link_to "Orders", orders_path %>
+          <%= link_to "Settings", edit_settings_path %>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container">
+      <% flash.each do |type, message| %>
+        <div class="flash flash-<%= type %>"><%= message %></div>
+      <% end %>
+
+      <%= yield %>
+    </main>
   </body>
 </html>

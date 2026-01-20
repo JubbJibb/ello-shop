@@ -1,0 +1,29 @@
+<% content_for :title, "Ello Shop" %>
+
+<section class="hero">
+  <h1>Fresh bags, faster checkout.</h1>
+  <p>
+    Build your order in minutes. Choose your cookie bags, set delivery details, and
+    we will handle the rest.
+  </p>
+  <div class="page-actions">
+    <%= link_to "Start an order", "#checkout", class: "btn btn-primary" %>
+    <%= link_to "View orders", orders_path, class: "btn btn-secondary" %>
+  </div>
+</section>
+
+<section class="grid grid-2">
+  <% Order::PRODUCTS.each do |product| %>
+    <div class="card">
+      <h3><%= product[:name] %></h3>
+      <p class="help-text"><%= product[:description] %></p>
+      <p><strong><%= number_to_currency(@price_per_bag, unit: "$", precision: 0) %></strong> per bag</p>
+    </div>
+  <% end %>
+</section>
+
+<section id="checkout" class="card" style="margin-top: 32px;">
+  <h2>Checkout</h2>
+  <p class="help-text">Enter your details and confirm the bag quantities below.</p>
+  <%= render "orders/form", order: @order, show_status: false, submit_label: "Place order" %>
+</section>

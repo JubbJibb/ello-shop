@@ -1,11 +1,11 @@
 
 class SettingsController < ApplicationController
+  before_action :set_setting
+
   def edit
-    @setting = Setting.first
   end
 
   def update
-    @setting = Setting.first
     if @setting.update(setting_params)
       redirect_to orders_path, notice: "Updated price successfully"
     else
@@ -14,6 +14,10 @@ class SettingsController < ApplicationController
   end
 
   private
+
+  def set_setting
+    @setting = Setting.current
+  end
 
   def setting_params
     params.require(:setting).permit(:price_per_bag)
