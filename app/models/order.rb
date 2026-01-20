@@ -10,7 +10,7 @@ class Order < ApplicationRecord
     end
   
     def price_per_bag
-      Setting.first&.price_per_bag || 60
+      Setting.current.price_per_bag
     end
   
     def order_cost
