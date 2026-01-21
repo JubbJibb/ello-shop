@@ -1,10 +1,122 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "Order Details" %>
 
-<%= render @order %>
+<div class="mb-6">
+  <%= link_to orders_path, class: "btn btn-ghost btn-sm gap-2" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    </svg>
+    Back to Orders
+  <% end %>
+</div>
 
-<div>
-  <%= link_to "Edit this order", edit_order_path(@order) %> |
-  <%= link_to "Back to orders", orders_path %>
+<div class="card bg-base-100 shadow-xl border border-base-300 mb-6">
+  <div class="card-body">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        Order Details
+      </h1>
+      <div class="flex gap-2">
+        <%= link_to edit_order_path(@order), class: "btn btn-primary gap-2" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Edit
+        <% end %>
+        <%= button_to order_path(@order), method: :delete, 
+            class: "btn btn-error gap-2",
+            data: { confirm: "Are you sure you want to delete this order?" } do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          Delete
+        <% end %>
+      </div>
+    </div>
 
-  <%= button_to "Destroy this order", @order, method: :delete %>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="stat bg-base-200 rounded-xl p-6">
+        <div class="stat-title">Order Date</div>
+        <div class="stat-value text-lg"><%= @order.order_date || "—" %></div>
+      </div>
+
+      <div class="stat bg-base-200 rounded-xl p-6">
+        <div class="stat-title">Status</div>
+        <div class="stat-value text-lg">
+          <% case @order.status %>
+          <% when "Done" %>
+            <span class="badge badge-success badge-lg">Done</span>
+          <% when "Packing" %>
+            <span class="badge badge-warning badge-lg">Packing</span>
+          <% when "Cancelled" %>
+            <span class="badge badge-error badge-lg">Cancelled</span>
+          <% else %>
+            <span class="badge badge-ghost badge-lg">—</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h2 class="text-2xl font-bold mb-4">Customer Information</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <div class="text-sm opacity-70 mb-1">Customer Name</div>
+        <div class="text-lg font-semibold"><%= @order.customer_name %></div>
+      </div>
+      <div>
+        <div class="text-sm opacity-70 mb-1">Customer Address</div>
+        <div class="text-lg"><%= @order.customer_address.presence || "—" %></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h2 class="text-2xl font-bold mb-4">Product Quantities</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="stat bg-secondary/10 rounded-xl p-6">
+        <div class="stat-title">Pork Quantity</div>
+        <div class="stat-value text-3xl text-secondary"><%= @order.pork_qty.to_i %></div>
+        <div class="stat-desc">bags</div>
+      </div>
+      <div class="stat bg-accent/10 rounded-xl p-6">
+        <div class="stat-title">Chicken Quantity</div>
+        <div class="stat-value text-3xl text-accent"><%= @order.chicken_qty.to_i %></div>
+        <div class="stat-desc">bags</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h2 class="text-2xl font-bold mb-4">Delivery Information</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <div class="text-sm opacity-70 mb-1">Delivery Channel</div>
+        <div class="text-lg font-semibold"><%= @order.delivery_channel.presence || "—" %></div>
+      </div>
+      <div>
+        <div class="text-sm opacity-70 mb-1">Delivery Date</div>
+        <div class="text-lg"><%= @order.delivery_date.presence || "—" %></div>
+      </div>
+      <div>
+        <div class="text-sm opacity-70 mb-1">Delivery Fee</div>
+        <div class="text-lg font-semibold">
+          <%= number_to_currency(@order.delivery_cost, unit: "฿", precision: 0) %>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="stat bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl p-6 border border-primary/30">
+      <div class="stat-title text-lg">Total Cost</div>
+      <div class="stat-value text-4xl text-primary">
+        <%= number_to_currency(@order.total_cost, unit: "฿", precision: 0) %>
+      </div>
+      <div class="stat-desc">
+        Order: <%= number_to_currency(@order.order_cost, unit: "฿", precision: 0) %> + 
+        Delivery: <%= number_to_currency(@order.delivery_cost, unit: "฿", precision: 0) %>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,65 +1,116 @@
-<%= form_with(model: order) do |form| %>
+<%= form_with(model: order, class: "space-y-6") do |form| %>
   <% if order.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(order.errors.count, "error") %> prohibited this order from being saved:</h2>
-
-      <ul>
-        <% order.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+    <div class="alert alert-error shadow-lg mb-6">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div>
+        <h3 class="font-bold"><%= pluralize(order.errors.count, "error") %> prohibited this order from being saved:</h3>
+        <ul class="list-disc list-inside mt-2">
+          <% order.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :order_date, style: "display: block" %>
-    <%= form.text_field :order_date %>
-  </div>
+  <div class="card bg-base-100 shadow-xl border border-base-300">
+    <div class="card-body">
+      <h2 class="card-title mb-6 text-2xl">Order Information</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="form-control">
+          <%= form.label :order_date, class: "label" do %>
+            <span class="label-text font-semibold">Order Date</span>
+          <% end %>
+          <%= form.date_field :order_date, class: "input input-bordered w-full focus:input-primary" %>
+        </div>
 
-  <div>
-    <%= form.label :customer_name, style: "display: block" %>
-    <%= form.text_field :customer_name %>
-  </div>
+        <div class="form-control">
+          <%= form.label :status, class: "label" do %>
+            <span class="label-text font-semibold">Status</span>
+          <% end %>
+          <%= form.select :status, Order::STATUSES, { include_blank: "Select status" }, { class: "select select-bordered w-full focus:select-primary" } %>
+        </div>
+      </div>
 
-  <div>
-    <%= form.label :customer_address, style: "display: block" %>
-    <%= form.text_field :customer_address %>
-  </div>
+      <div class="divider my-6"></div>
 
-  <div>
-    <%= form.label :pork_qty, style: "display: block" %>
-    <%= form.text_field :pork_qty %>
-  </div>
+      <h3 class="text-lg font-semibold mb-4">Customer Details</h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="form-control md:col-span-2">
+          <%= form.label :customer_name, class: "label" do %>
+            <span class="label-text font-semibold">Customer Name</span>
+          <% end %>
+          <%= form.text_field :customer_name, class: "input input-bordered w-full focus:input-primary", placeholder: "Enter customer name" %>
+        </div>
 
-  <div>
-    <%= form.label :chicken_qty, style: "display: block" %>
-    <%= form.text_field :chicken_qty %>
-  </div>
+        <div class="form-control md:col-span-2">
+          <%= form.label :customer_address, class: "label" do %>
+            <span class="label-text font-semibold">Customer Address</span>
+          <% end %>
+          <%= form.text_field :customer_address, class: "input input-bordered w-full focus:input-primary", placeholder: "Enter delivery address" %>
+        </div>
+      </div>
 
-  <div>
-    <%= form.label :delivery_channel, style: "display: block" %>
-    <%= form.text_field :delivery_channel %>
-  </div>
+      <div class="divider my-6"></div>
 
-  <div>
-    <%= form.label :delivery_fee, style: "display: block" %>
-    <%= form.text_field :delivery_fee %>
-  </div>
+      <h3 class="text-lg font-semibold mb-4">Product Quantities</h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="form-control">
+          <%= form.label :pork_qty, class: "label" do %>
+            <span class="label-text font-semibold">Pork Quantity</span>
+          <% end %>
+          <%= form.number_field :pork_qty, class: "input input-bordered w-full focus:input-primary", placeholder: "0", min: 0, step: 1 %>
+        </div>
 
-  <div>
-    <%= form.label :delivery_date, style: "display: block" %>
-    <%= form.text_field :delivery_date %>
-  </div>
+        <div class="form-control">
+          <%= form.label :chicken_qty, class: "label" do %>
+            <span class="label-text font-semibold">Chicken Quantity</span>
+          <% end %>
+          <%= form.number_field :chicken_qty, class: "input input-bordered w-full focus:input-primary", placeholder: "0", min: 0, step: 1 %>
+        </div>
+      </div>
 
-  <div>
-  <%= form.label :status %>
-  <%= form.select :status, Order::STATUSES, include_blank: true %>
-  </div>
-  <div>
-</div>
+      <div class="divider my-6"></div>
 
+      <h3 class="text-lg font-semibold mb-4">Delivery Information</h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="form-control">
+          <%= form.label :delivery_channel, class: "label" do %>
+            <span class="label-text font-semibold">Delivery Channel</span>
+          <% end %>
+          <%= form.text_field :delivery_channel, class: "input input-bordered w-full focus:input-primary", placeholder: "e.g., Grab, Line Man, etc." %>
+        </div>
 
-  <div>
-    <%= form.submit %>
+        <div class="form-control">
+          <%= form.label :delivery_date, class: "label" do %>
+            <span class="label-text font-semibold">Delivery Date</span>
+          <% end %>
+          <%= form.date_field :delivery_date, class: "input input-bordered w-full focus:input-primary" %>
+        </div>
+
+        <div class="form-control">
+          <%= form.label :delivery_fee, class: "label" do %>
+            <span class="label-text font-semibold">Delivery Fee (฿)</span>
+          <% end %>
+          <%= form.number_field :delivery_fee, class: "input input-bordered w-full focus:input-primary", placeholder: "0", min: 0, step: 0.01 %>
+        </div>
+      </div>
+
+      <div class="card-actions justify-end mt-8">
+        <%= link_to "Cancel", orders_path, class: "btn btn-ghost" %>
+        <%= form.submit class: "btn btn-primary gap-2 shadow-lg hover:shadow-xl transition-all" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <%= order.new_record? ? "Create Order" : "Update Order" %>
+        <% end %>
+      </div>
+    </div>
   </div>
 <% end %>
